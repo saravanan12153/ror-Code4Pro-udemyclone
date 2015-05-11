@@ -4,5 +4,11 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-   validates_presence_of :name, length: {maximum: 25}      
+   validates_presence_of :name, length: {maximum: 25} 
+
+   after_create :send_notification
+
+   def send_notification
+   		MyMailer.new_user(self).deliver
+   end     
 end
